@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hassan Portfolio</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <style>
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.95);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.8);
+                opacity: 0;
+            }
+        }
+        .pulse-ring {
+            animation: pulse-ring 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 60%, 100% {
+                transform: translateY(0);
+                opacity: 0.5;
+            }
+            30% {
+                transform: translateY(-10px);
+                opacity: 1;
+            }
+        }
+        .smooth-scroll {
+            scroll-behavior: smooth;
+        }
+        /* Chatbot Styles */
+        #chatbot-toggler {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9998;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.6);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #chatbot-toggler:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(59, 130, 246, 0.8);
+        }
+        #chatbot-toggler .material-symbols-outlined {
+            display: flex;
+        }
+        #chatbot-toggler .material-symbols-rounded {
+            display: none;
+        }
+        #chatbot-toggler.active .material-symbols-outlined {
+            display: none;
+        }
+        #chatbot-toggler.active .material-symbols-rounded {
+            display: flex;
+        }
+        .chatbot-popup {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 420px;
+            height: 600px;
+            background: #1f2937;
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 12px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 9999;
+        }
+        .chatbot-popup.active {
+            display: flex;
+        }
+        .chat-header {
+            background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .header-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .chatbot-logo {
+            width: 40px;
+            height: 40px;
+            fill: white;
+        }
+        .logo-text {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+        }
+        #close-chatbot {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+        }
+        .chat-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .message {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .message.user {
+            justify-content: flex-end;
+        }
+        .message-text {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            word-wrap: break-word;
+            line-height: 1.4;
+        }
+        .bot-message .message-text {
+            background: #374151;
+            color: #e5e7eb;
+            border-left: 3px solid #06b6d4;
+        }
+        .user .message-text {
+            background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+            color: white;
+        }
+        .bot-avatar {
+            width: 32px;
+            height: 32px;
+            fill: #06b6d4;
+            flex-shrink: 0;
+        }
+        .chat-footer {
+            padding: 15px;
+            border-top: 1px solid rgba(6, 182, 212, 0.2);
+        }
+        .chat-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .message-input {
+            flex: 1;
+            padding: 10px 15px;
+            background: #374151;
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            outline: none;
+            font-family: inherit;
+            resize: none;
+            min-height: 40px;
+            max-height: 100px;
+        }
+        .message-input:focus {
+            border-color: #06b6d4;
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+        }
+        .message-input::placeholder {
+            color: #9ca3af;
+        }
+        .chat-controls {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+        }
+        #emoji-picker,
+        #file-upload {
+            background: none;
+            border: none;
+            color: #06b6d4;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            transition: all 0.2s ease;
+        }
+        #emoji-picker:hover,
+        #file-upload:hover {
+            color: #3b82f6;
+            transform: scale(1.1);
+        }
+        #send-message {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%);
+            border: none;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 18px;
+        }
+        #send-message:hover {
+            transform: scale(1.05);
+        }
+        .file-upload-wrapper {
+            position: relative;
+        }
+        .emoji-section {
+            display: none;
+            background: #374151;
+            border-top: 1px solid rgba(6, 182, 212, 0.2);
+            padding: 12px;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+        .emoji-section.show {
+            display: block;
+        }
+        .emoji-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 8px;
+        }
+        .emoji-item {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            border-radius: 6px;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+            background: #1f2937;
+        }
+        .emoji-item:hover {
+            background: #475569;
+            border-color: #06b6d4;
+            transform: scale(1.2);
+        }
+        @media (max-width: 480px) {
+            .chatbot-popup {
+                width: 100vw;
+                height: 100vh;
+                bottom: 0;
+                right: 0;
+                border-radius: 0;
+            }
+            #chatbot-toggler {
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white smooth-scroll">
+    <!-- Header/Navigation -->
+    <header class="fixed top-0 w-full z-50 bg-gray-900/95 backdrop-blur-md border-b border-gray-700/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-2 text-xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent hover:from-blue-300 hover:to-cyan-300 transition-all">
+                    <i class="fas fa-code"></i>
+                    <span>Hassan Portfolio</span>
+                </a>
+
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex gap-8">
+                    <a href="#home" class="text-gray-300 hover:text-cyan-400 transition-colors duration-300 font-medium">Home</a>
+                    <a href="#about" class="text-gray-300 hover:text-cyan-400 transition-colors duration-300 font-medium">About</a>
+                    <a href="#skills" class="text-gray-300 hover:text-cyan-400 transition-colors duration-300 font-medium">Skills</a>
+                    <a href="#contact" class="text-gray-300 hover:text-cyan-400 transition-colors duration-300 font-medium">Contact</a>
+                </nav>
+
+                <!-- Mobile Menu Toggle -->
+                <button class="menu-toggle md:hidden flex flex-col gap-1.5 focus:outline-none">
+                    <span class="w-6 h-0.5 bg-cyan-400 transition-all duration-300"></span>
+                    <span class="w-6 h-0.5 bg-cyan-400 transition-all duration-300"></span>
+                    <span class="w-6 h-0.5 bg-cyan-400 transition-all duration-300"></span>
+                </button>
+            </div>
+
+            <!-- Mobile Navigation -->
+            <nav class="hidden mobile-menu md:hidden pb-4 pt-2">
+                <a href="#home" class="block text-gray-300 hover:text-cyan-400 py-2 transition-colors">Home</a>
+                <a href="#about" class="block text-gray-300 hover:text-cyan-400 py-2 transition-colors">About</a>
+                <a href="#skills" class="block text-gray-300 hover:text-cyan-400 py-2 transition-colors">Skills</a>
+                <a href="#contact" class="block text-gray-300 hover:text-cyan-400 py-2 transition-colors">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="pt-32 pb-20 px-4 sm:px-6 lg:px-8" id="home">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <!-- Content -->
+                <div class="space-y-6">
+                    <div class="space-y-4">
+                        <h1 class="text-5xl md:text-6xl font-bold leading-tight">
+                            <span class="bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent">Muhammad Hassan</span>
+                        </h1>
+                        <h2 class="text-2xl md:text-3xl text-gray-300 font-semibold">
+                            Passionate <span class="text-cyan-400">Developer</span>
+                        </h2>
+                    </div>
+
+                    <p class="text-gray-400 text-lg leading-relaxed max-w-lg">
+                        I am a Web Developer based in Pakistan with 1 year of experience helping clients launch their websites. I focus on delivering work that is fast, responsive, and easy to use.
+                    </p>
+
+                    <!-- CTA Buttons -->
+                    <div class="flex flex-col sm:flex-row gap-4 pt-4">
+                        <a href="#projects" class="inline-flex items-center justify-center gap-2 px-8 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-cyan-600 transition-all duration-300 shadow-lg hover:shadow-cyan-500/50">
+                            <i class="fas fa-code"></i> View My Projects
+                        </a>
+                        <a href="mailto:hassansadiq19920@gmail.com" class="inline-flex items-center justify-center gap-2 px-8 py-3 border-2 border-cyan-400 text-cyan-400 font-semibold rounded-lg hover:bg-cyan-400/10 transition-all duration-300">
+                            <i class="fas fa-paper-plane"></i> Contact Me
+                        </a>
+                    </div>
+
+                    <!-- Social Icons -->
+                    <div class="flex gap-6 pt-4">
+                        <a href="https://github.com/muhammadh4ssan"target="_blank" class="w-12 h-12 rounded-lg bg-gray-800 hover:bg-cyan-500/20 flex items-center justify-center text-cyan-400 hover:text-cyan-300 transition-all duration-300 border border-gray-700 hover:border-cyan-400">
+                            <i class="fab fa-github text-xl"></i>
+                        </a>
+                        <a href="https://pk.linkedin.com/in/muhammad-hassan-205a073a4"target="_blank" class="w-12 h-12 rounded-lg bg-gray-800 hover:bg-cyan-500/20 flex items-center justify-center text-cyan-400 hover:text-cyan-300 transition-all duration-300 border border-gray-700 hover:border-cyan-400">
+                            <i class="fab fa-linkedin text-xl"></i>
+                        </a>
+                        <a href="https://x.com/mh4ssanx1?s=21"target="_blank"
+                        class="w-12 h-12 rounded-lg bg-gray-800 hover:bg-cyan-500/20 flex items-center justify-center text-cyan-400 hover:text-cyan-300 transition-all duration-300 border border-gray-700 hover:border-cyan-400">
+                            <i class="fab fa-twitter text-xl"></i>
+                        </a>
+                        <a href="https://www.instagram.com/h4ssan.1x?igsh=MXFpN2ZhcWVxbmtrZQ%3D%3D&utm_source=qr"target="_blank"
+                        class="w-12 h-12 rounded-lg bg-gray-800 hover:bg-cyan-500/20 flex items-center justify-center text-cyan-400 hover:text-cyan-300 transition-all duration-300 border border-gray-700 hover:border-cyan-400">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                        <a href="https://www.tiktok.com/@h4ssansadiq?_r=1&_t=ZS-935iM3nnWKK" target="_blank"
+                        class="w-12 h-12 rounded-lg bg-gray-800 hover:bg-cyan-500/20 flex items-center justify-center text-cyan-400 hover:text-cyan-300 transition-all duration-300 border border-gray-700 hover:border-cyan-400">
+                            <i class="fab fa-tiktok text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Profile Image -->
+                <div class="relative flex justify-center">
+                    <div class="relative w-64 h-64 md:w-80 md:h-80">
+                        <!-- Animated Background Rings -->
+                        <div class="absolute inset-0 rounded-full border-2 border-cyan-400/30 animate-pulse"></div>
+                        <div class="absolute inset-4 rounded-full border-2 border-blue-400/20 pulse-ring" style="animation-delay: 0s;"></div>
+                        <div class="absolute inset-8 rounded-full border-2 border-teal-400/10 pulse-ring" style="animation-delay: 0.6s;"></div>
+
+                        <!-- Profile Image Container -->
+                        <div class="absolute inset-0 rounded-full overflow-hidden border-4 border-gradient-to-r from-blue-400 to-cyan-400 bg-gradient-to-br from-blue-500/20 to-cyan-500/20">
+                            <img src="IMG_0576.png" alt="Muhammad Hassan" class="w-full h-full object-cover" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="py-20 px-4 sm:px-6 lg:px-8 bg-gray-800/30 border-t border-gray-700/30" id="about">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-12">
+                <h2 class="text-4xl md:text-5xl font-bold">
+                    <span class="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">About Me</span>
+                </h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <!-- Image -->
+                <div class="flex justify-center">
+                    <div class="relative">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-blue-400 to-cyan-400 rounded-lg blur opacity-30"></div>
+                        <img src="IMG_1134 342.png" alt="Muhammad Hassan" class="relative rounded-lg w-full max-w-sm object-cover shadow-xl" />
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="text-3xl md:text-4xl font-bold text-white mb-6">
+                            Designing Is My <span class="text-cyan-400">Passion</span>
+                        </h3>
+                        <p class="text-gray-300 text-lg leading-relaxed mb-4">
+                            My name is Muhammad Hassan, and I am a Web Developer from Pakistan with a passion for turning ideas into reality on the web. Over the last 12 months, I have immersed myself in the world of coding, moving from basic concepts to building functional projects.
+                        </p>
+                        <p class="text-gray-300 text-lg leading-relaxed">
+                            I may be early in my career, but I bring a strong work ethic and a hunger to learn. I am always exploring the latest web trends. My goal is to grow as a developer while helping clients build a strong online presence.
+                        </p>
+                    </div>
+
+                    <!-- CTA Button -->
+                    <a href="cv.pdf" download class="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-cyan-600 transition-all duration-300 shadow-lg hover:shadow-cyan-500/50 w-fit">
+                        <i class="fas fa-download"></i> Download CV
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="py-20 px-4 sm:px-6 lg:px-8" id="skills">
+        <div class="max-w-7xl mx-auto">
+            <div class="mb-12">
+                <h2 class="text-4xl md:text-5xl font-bold">
+                    <span class="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">My Skills</span>
+                </h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12">
+                <!-- Text Content -->
+                <div class="space-y-8">
+                    <div>
+                        <h3 class="text-3xl md:text-4xl font-bold text-white mb-6">
+                            Skills Reflects Our <span class="text-cyan-400">Knowledge</span>
+                        </h3>
+                        <p class="text-gray-300 text-lg leading-relaxed">
+                            I have a solid foundation in the core web technologies. I use HTML5 to structure content and CSS3 to create responsive, modern designs. I also utilize JavaScript to add interactivity and functionality to my web pages, ensuring a smooth user experience.
+                        </p>
+                    </div>
+
+                    <!-- Experience Card -->
+                    <div class="flex items-center gap-6 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 p-8 rounded-lg border border-cyan-400/30 hover:border-cyan-400/60 transition-all duration-300">
+                        <div class="text-5xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">1</div>
+                        <div>
+                            <p class="text-xl font-semibold text-white">Years Of</p>
+                            <p class="text-xl font-semibold text-cyan-400">Experience</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skills Grid -->
+                <div class="grid grid-cols-2 gap-6">
+                    <!-- HTML Skill -->
+                    <div class="bg-gray-800/40 border border-gray-700/50 hover:border-cyan-400/50 rounded-lg p-6 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-400/10">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="text-lg font-semibold text-white">HTML</h4>
+                            <span class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">80%</span>
+                        </div>
+                        <div class="w-full bg-gray-700 rounded-full h-2">
+                            <div class="bg-gradient-to-r from-blue-400 to-cyan-400 h-2 rounded-full" style="width: 90%"></div>
+                        </div>
+                    </div>
+
+                    <!-- CSS Skill -->
+                    <div class="bg-gray-800/40 border border-gray-700/50 hover:border-cyan-400/50 rounded-lg p-6 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-400/10">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="text-lg font-semibold text-white">CSS</h4>
+                            <span class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">70%</span>
+                        </div>
+                        <div class="w-full bg-gray-700 rounded-full h-2">
+                            <div class="bg-gradient-to-r from-blue-400 to-cyan-400 h-2 rounded-full" style="width: 80%"></div>
+                        </div>
+                    </div>
+
+                    <!-- JavaScript Skill -->
+                    <div class="bg-gray-800/40 border border-gray-700/50 hover:border-cyan-400/50 rounded-lg p-6 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-400/10">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="text-lg font-semibold text-white">JavaScript</h4>
+                            <span class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">50%</span>
+                        </div>
+                        <div class="w-full bg-gray-700 rounded-full h-2">
+                            <div class="bg-gradient-to-r from-blue-400 to-cyan-400 h-2 rounded-full" style="width: 70%"></div>
+                        </div>
+                    </div>
+
+                    <!-- PHP Skill -->
+                    <div class="bg-gray-800/40 border border-gray-700/50 hover:border-cyan-400/50 rounded-lg p-6 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-400/10">
+                        <div class="flex items-center justify-between mb-4">
+                            <h4 class="text-lg font-semibold text-white">PHP</h4>
+                            <span class="text-2xl font-bold text-gray-400">N/A</span>
+                        </div>
+                        <div class="w-full bg-gray-700 rounded-full h-2">
+                            <div class="bg-gray-600 h-2 rounded-full" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+  <!-- Services Section -->
+<section class="py-20 px-4 sm:px-6 lg:px-8 bg-gray-800/30 border-t border-gray-700/30" id="services">
+    <div class="max-w-7xl mx-auto">
+        <div class="mb-12">
+            <h2 class="text-4xl md:text-5xl font-bold">
+                <span class="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">My Services</span>
+            </h2>
+        </div>
+
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="bg-gray-800/40 border border-gray-700/50 hover:border-cyan-400/50 rounded-lg p-8 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-400/10 hover:-translate-y-2">
+                <div class="w-14 h-14 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center mb-6 text-white text-2xl">
+                    <i class="fas fa-desktop"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-4">Web Development</h3>
+                <p class="text-gray-300 leading-relaxed">I pride myself on writing clean, maintainable code and delivering projects on time. If you're looking for a developer who is hardworking and eager to build high-quality web solutions, let's connect!</p>
+            </div>
+
+            <div class="bg-gray-800/40 border border-gray-700/50 hover:border-cyan-400/50 rounded-lg p-8 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-400/10 hover:-translate-y-2">
+                <div class="w-14 h-14 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center mb-6 text-white text-2xl">
+                    <i class="fas fa-paint-brush"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-4">Graphic Design</h3>
+                <p class="text-gray-300 leading-relaxed">I am a creative professional from Pakistan with 3 years of experience blending design and code. I specialize in crafting visually stunning graphics and turning them into functional HTML/CSS websites.</p>
+            </div>
+
+            <div class="bg-gray-800/40 border border-gray-700/50 hover:border-cyan-400/50 rounded-lg p-8 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-400/10 hover:-translate-y-2">
+                <div class="w-14 h-14 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-lg flex items-center justify-center mb-6 text-white text-2xl">
+                    <i class="fab fa-android"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-4">Icon Design</h3>
+                <p class="text-gray-300 leading-relaxed">High-quality web development needs high-quality visuals. I design custom icons and assets to make your project stand out from the competition.</p>
+            </div>
+        </div>
+    </div>
+</section>
+    <!-- Contact Section -->
+    <section class="py-20 px-4 sm:px-6 lg:px-8" id="contact">
+        <div class="max-w-4xl mx-auto">
+            <div class="mb-12 text-center">
+                <h2 class="text-4xl md:text-5xl font-bold">
+                    <span class="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Contact Me</span>
+                </h2>
+            </div>
+
+            <div class="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 border border-cyan-400/30 rounded-lg p-12 text-center space-y-8">
+                <div class="space-y-4">
+                    <h3 class="text-3xl md:text-4xl font-bold text-white">Have Any Project?</h3>
+                    <p class="text-gray-300 text-lg leading-relaxed max-w-2xl mx-auto">
+                        Are you looking for a modern website or unique custom icons to elevate your brand? I am currently available for new projects and collaborations. Whether you have a fully designed concept or just a rough idea, I can help you bring it to life with HTML5, CSS, and custom iconography.
+                    </p>
+                    <p class="text-cyan-400 text-xl font-semibold">
+                        Let's build something amazing together!
+                    </p>
+                </div>
+
+                <!-- CTA Button -->
+                <a href="https://wa.me/923262136002" class="inline-flex items-center gap-2 px-10 py-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-bold text-lg rounded-lg hover:from-blue-600 hover:to-cyan-600 transition-all duration-300 shadow-lg hover:shadow-cyan-500/50 hover:-translate-y-1">
+                    <i class="fab fa-whatsapp"></i> Let's Chat
+                </a>
+            </div>
+        </div>
+        <!-- Footer Section Start -->
+<footer class="py-8 px-4 sm:px-6 lg:px-8 bg-gray-900 border-t border-gray-700/30 mt-20">
+  <div class="max-w-7xl mx-auto text-center">
+    <span class="text-gray-400">
+      Created By <a href="#" class="text-cyan-400 hover:text-cyan-300 transition-colors">HassanWebDev</a> | &#169; 2026 All Rights Reserved
+    </span>
+  </div>
+</footer>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script>
+        // Mobile Menu Toggle
+        const menuToggle = document.querySelector('.menu-toggle');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-menu a');
+
+        menuToggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Smooth scroll for all anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+
+    <!-- Chatbot Widget -->
+    <button id="chatbot-toggler">
+      <span class="material-symbols-outlined">mode_comment</span>
+      <span class="material-symbols-rounded">close</span>
+    </button>
+
+    <div class="chatbot-popup">
+      <!-- Chatbot Header -->
+      <div class="chat-header">
+        <div class="header-info">
+          <svg 
+            class="chatbot-logo"
+            xmlns="http://www.w3.org/2000/svg"
+            width="50"
+            height="50"
+            viewBox="0 0 1024 1024"
+          >
+            <path
+              d="M738.3 287.6H285.7c-59 0-106.8 47.8-106.8 106.8v303.1c0 59 47.8 106.8 106.8 106.8h81.5v111.1c0 .7.8 1.1 1.4.7l166.9-110.6 41.8-.8h117.4l43.6-.4c59 0 106.8-47.8 106.8-106.8V394.5c0-59-47.8-106.9-106.8-106.9zM351.7 448.2c0-29.5 23.9-53.5 53.5-53.5s53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5-53.5-23.9-53.5-53.5zm157.9 267.1c-67.8 0-123.8-47.5-132.3-109h264.6c-8.6 61.5-64.5 109-132.3 109zm110-213.7c-29.5 0-53.5-23.9-53.5-53.5s23.9-53.5 53.5-53.5 53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5zM867.2 644.5V453.1h26.5c19.4 0 35.1 15.7 35.1 35.1v121.1c0 19.4-15.7 35.1-35.1 35.1h-26.5zM95.2 609.4V488.2c0-19.4 15.7-35.1 35.1-35.1h26.5v191.3h-26.5c-19.4 0-35.1-15.7-35.1-35.1zM561.5 149.6c0 23.4-15.6 43.3-36.9 49.7v44.9h-30v-44.9c-21.4-6.5-36.9-26.3-36.9-49.7 0-28.6 23.3-51.9 51.9-51.9s51.9 23.3 51.9 51.9z"
+            ></path>
+          </svg>
+
+          <h2 class="logo-text">Chatbot</h2>
+        </div>
+        <button id="close-chatbot"
+        class="material-symbols-rounded">keyboard_arrow_down</button>
+      </div>
+
+      <!-- Chatbot Body -->
+      <div class="chat-body">
+        <div class="message bot-message">
+          <svg 
+            class="bot-avatar"
+            xmlns="http://www.w3.org/2000/svg"
+            width="50"
+            height="50"
+            viewBox="0 0 1024 1024"
+          >
+          <path
+              d="M738.3 287.6H285.7c-59 0-106.8 47.8-106.8 106.8v303.1c0 59 47.8 106.8 106.8 106.8h81.5v111.1c0 .7.8 1.1 1.4.7l166.9-110.6 41.8-.8h117.4l43.6-.4c59 0 106.8-47.8 106.8-106.8V394.5c0-59-47.8-106.9-106.8-106.9zM351.7 448.2c0-29.5 23.9-53.5 53.5-53.5s53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5-53.5-23.9-53.5-53.5zm157.9 267.1c-67.8 0-123.8-47.5-132.3-109h264.6c-8.6 61.5-64.5 109-132.3 109zm110-213.7c-29.5 0-53.5-23.9-53.5-53.5s23.9-53.5 53.5-53.5 53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5zM867.2 644.5V453.1h26.5c19.4 0 35.1 15.7 35.1 35.1v121.1c0 19.4-15.7 35.1-35.1 35.1h-26.5zM95.2 609.4V488.2c0-19.4 15.7-35.1 35.1-35.1h26.5v191.3h-26.5c-19.4 0-35.1-15.7-35.1-35.1zM561.5 149.6c0 23.4-15.6 43.3-36.9 49.7v44.9h-30v-44.9c-21.4-6.5-36.9-26.3-36.9-49.7 0-28.6 23.3-51.9 51.9-51.9s51.9 23.3 51.9 51.9z"
+            ></path>
+          </svg>
+          <div class="message-text">
+            Hey there 👋 <br />
+            How can i help you today?
+          </div>
+        </div>
+      </div>
+      
+
+      <!-- Chatbot Footer -->
+      <div class="chat-footer">
+        <form action="#" class="chat-form">
+          <textarea placeholder="Message..." class="message-input" required></textarea>
+          <div class="chat-controls">
+            <button type="button" id="emoji-picker" class="material-symbols-rounded">sentiment_satisfied</button>
+            <div class="file-upload-wrapper">
+              <input type="file" accept="images/*" id="file-input" hidden>
+              <button type="button" id="file-upload" class="material-symbols-rounded">attach_file</button>
+            </div>
+            <button type="submit" id="send-message" class="material-symbols-rounded">arrow_upward</button>
+          </div>
+        </form>
+        <!-- Emoji Section -->
+        <div class="emoji-section" id="emoji-section">
+          <div class="emoji-grid" id="emoji-grid"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- linking emoji mart script for emoji picker -->
+    <script src="https://cdn.jsdelivr.net/npm/emoji-mart@latest/dist/browser.js"></script>
+
+    <script>
+       // Chatbot Configuration
+const GEMINI_API_KEY = 'AIzaSyADbI77O_lP-6ThP-Jk5NnjqN3JxxoHhRI';
+const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent';
+
+// Chatbot Variables
+const chatbotToggler = document.getElementById('chatbot-toggler');
+const chatbotPopup = document.querySelector('.chatbot-popup');
+const closeChatbot = document.getElementById('close-chatbot');
+const chatBody = document.querySelector('.chat-body');
+const messageInput = document.querySelector('.message-input');
+const sendMessage = document.getElementById('send-message');
+const fileInput = document.getElementById('file-input');
+const fileUpload = document.getElementById('file-upload');
+const emojiPicker = document.getElementById('emoji-picker');
+const emojiSection = document.getElementById('emoji-section');
+const emojiGrid = document.getElementById('emoji-grid');
+
+        // Toggle chatbot
+        chatbotToggler.addEventListener('click', () => {
+            chatbotToggler.classList.toggle('active');
+            chatbotPopup.classList.toggle('active');
+        });
+
+        // Close chatbot
+        closeChatbot.addEventListener('click', () => {
+            chatbotToggler.classList.remove('active');
+            chatbotPopup.classList.remove('active');
+        });
+
+        // Send message handler
+        sendMessage.addEventListener('click', (e) => {
+            e.preventDefault();
+            handleSendMessage();
+        });
+
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSendMessage();
+            }
+        });
+
+        function handleSendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+
+            // Add user message
+            addMessage(message, 'user');
+            messageInput.value = '';
+            messageInput.style.height = 'auto';
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            // Call Gemini API
+            callGeminiAPI(message);
+        }
+
+        // Call Google Gemini API
+        async function callGeminiAPI(userMessage) {
+            try {
+                const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: userMessage
+                            }]
+                        }]
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API error: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                removeTypingIndicator();
+                
+                if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0]) {
+                    const botMessage = data.candidates[0].content.parts[0].text;
+                    addMessage(botMessage, 'bot');
+                } else {
+                    addMessage('Sorry, I could not generate a response. Please try again.', 'bot');
+                }
+            } catch (error) {
+                removeTypingIndicator();
+                console.error('Gemini API error:', error);
+                addMessage('Sorry, there was an error processing your request. Please try again.', 'bot');
+            }
+        }
+
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender === 'user' ? 'user' : 'bot-message'}`;
+            
+            if (sender === 'bot') {
+                messageDiv.innerHTML = `
+                    <svg 
+                        class="bot-avatar"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="50"
+                        height="50"
+                        viewBox="0 0 1024 1024"
+                    >
+                    <path
+                        d="M738.3 287.6H285.7c-59 0-106.8 47.8-106.8 106.8v303.1c0 59 47.8 106.8 106.8 106.8h81.5v111.1c0 .7.8 1.1 1.4.7l166.9-110.6 41.8-.8h117.4l43.6-.4c59 0 106.8-47.8 106.8-106.8V394.5c0-59-47.8-106.9-106.8-106.9zM351.7 448.2c0-29.5 23.9-53.5 53.5-53.5s53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5-53.5-23.9-53.5-53.5zm157.9 267.1c-67.8 0-123.8-47.5-132.3-109h264.6c-8.6 61.5-64.5 109-132.3 109zm110-213.7c-29.5 0-53.5-23.9-53.5-53.5s23.9-53.5 53.5-53.5 53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5zM867.2 644.5V453.1h26.5c19.4 0 35.1 15.7 35.1 35.1v121.1c0 19.4-15.7 35.1-35.1 35.1h-26.5zM95.2 609.4V488.2c0-19.4 15.7-35.1 35.1-35.1h26.5v191.3h-26.5c-19.4 0-35.1-15.7-35.1-35.1zM561.5 149.6c0 23.4-15.6 43.3-36.9 49.7v44.9h-30v-44.9c-21.4-6.5-36.9-26.3-36.9-49.7 0-28.6 23.3-51.9 51.9-51.9s51.9 23.3 51.9 51.9z"
+                        ></path>
+                    </svg>
+                    <div class="message-text">${text}</div>
+                `;
+            } else {
+                messageDiv.innerHTML = `<div class="message-text">${text}</div>`;
+            }
+
+            chatBody.appendChild(messageDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot-message';
+            typingDiv.id = 'typing-indicator';
+            typingDiv.innerHTML = `
+                <svg 
+                    class="bot-avatar"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="50"
+                    height="50"
+                    viewBox="0 0 1024 1024"
+                >
+                <path
+                    d="M738.3 287.6H285.7c-59 0-106.8 47.8-106.8 106.8v303.1c0 59 47.8 106.8 106.8 106.8h81.5v111.1c0 .7.8 1.1 1.4.7l166.9-110.6 41.8-.8h117.4l43.6-.4c59 0 106.8-47.8 106.8-106.8V394.5c0-59-47.8-106.9-106.8-106.9zM351.7 448.2c0-29.5 23.9-53.5 53.5-53.5s53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5-53.5-23.9-53.5-53.5zm157.9 267.1c-67.8 0-123.8-47.5-132.3-109h264.6c-8.6 61.5-64.5 109-132.3 109zm110-213.7c-29.5 0-53.5-23.9-53.5-53.5s23.9-53.5 53.5-53.5 53.5 23.9 53.5 53.5-23.9 53.5-53.5 53.5zM867.2 644.5V453.1h26.5c19.4 0 35.1 15.7 35.1 35.1v121.1c0 19.4-15.7 35.1-35.1 35.1h-26.5zM95.2 609.4V488.2c0-19.4 15.7-35.1 35.1-35.1h26.5v191.3h-26.5c-19.4 0-35.1-15.7-35.1-35.1zM561.5 149.6c0 23.4-15.6 43.3-36.9 49.7v44.9h-30v-44.9c-21.4-6.5-36.9-26.3-36.9-49.7 0-28.6 23.3-51.9 51.9-51.9s51.9 23.3 51.9 51.9z"
+                    ></path>
+                </svg>
+                <div class="message-text">
+                    <div style="display: flex; gap: 4px;">
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: #06b6d4; animation: bounce 1.4s infinite;"></span>
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: #06b6d4; animation: bounce 1.4s infinite 0.2s;"></span>
+                        <span style="width: 8px; height: 8px; border-radius: 50%; background: #06b6d4; animation: bounce 1.4s infinite 0.4s;"></span>
+                    </div>
+                </div>
+            `;
+            chatBody.appendChild(typingDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const typing = document.getElementById('typing-indicator');
+            if (typing) typing.remove();
+        }
+
+        // Predefined responses
+        function getPredefinedResponse(message) {
+            const responses = {
+                'hello': '👋 Hi! Welcome to my portfolio. How can I assist you today?',
+                'hi': '👋 Hi! Welcome to my portfolio. How can I assist you today?',
+                'skills': '💻 I specialize in HTML5, CSS3, JavaScript, and modern web design with Tailwind CSS. I have 1 year of hands-on experience building responsive and interactive websites.',
+                'experience': '📊 I have 1 year of professional web development experience. I focus on creating clean, maintainable code and delivering projects on time.',
+                'projects': '🚀 Check out my portfolio projects section to see my latest work. I build full-featured websites using HTML5, CSS3, and JavaScript.',
+                'contact': '📧 You can reach me through the contact section or chat with me here! I\'m available for freelance projects and collaborations.',
+                'available': '✅ Yes, I\'m currently available for new projects and collaborations. Feel free to reach out!',
+                'phone': '📱 You can contact me via WhatsApp at +92 326 2136002',
+                'email': '📧 For business inquiries, please use the contact form on my website.',
+                'design': '🎨 I specialize in modern, responsive web design with a focus on user experience and clean aesthetics.',
+                'default': 'I\'m here to help! Feel free to ask me about my skills, projects, experience, or how to get in touch. You can also ask to speak with the website owner.'
+            };
+
+            const lowerMessage = message.toLowerCase();
+            for (const [key, value] of Object.entries(responses)) {
+                if (lowerMessage.includes(key)) {
+                    return value;
+                }
+            }
+            return responses['default'];
+        }
+
+        // File upload handler
+        fileUpload.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                addMessage(`📎 Uploaded: ${file.name}`, 'user');
+                setTimeout(() => {
+                    removeTypingIndicator();
+                    addMessage('Thanks for sharing! I\'ve received your file.', 'bot');
+                }, 1000);
+            }
+        });
+
+        // Emoji data
+        const emojisData = ['😀', '😃', '😄', '😁', '😆', '😅', '🤣', '😂', '😊', '😇', '🙂', '🙃', '😉', '😌', '😍', '🥰', '😘', '😗', '😚', '😙', '🥲', '😋', '😛', '😜', '🤪', '😎', '🤩', '🥳', '😏', '😒', '😞', '😔', '😟', '😕', '🙁', '😲', '😳', '🥺', '😦', '😧', '😨', '😰', '😥', '😢', '😭', '😱', '😖', '😣', '😩', '😫', '🥱', '😤', '😡', '😠', '🤬', '😈', '👿', '💀', '👹', '👺', '👻', '👽', '👾', '🤖', '😺', '😸', '😹', '😻', '😼', '😽', '🙀', '😿', '😾', '❤️', '🧡', '💛', '💚', '💙', '💜', '🖤', '🤍', '💔', '💕', '💞', '💓', '💗', '💖', '💘', '💝'];
+
+        // Initialize emoji grid
+        function initEmojiGrid() {
+            emojiGrid.innerHTML = '';
+            emojisData.forEach(emoji => {
+                const emojiItem = document.createElement('div');
+                emojiItem.className = 'emoji-item';
+                emojiItem.textContent = emoji;
+                emojiItem.addEventListener('click', () => {
+                    messageInput.value += emoji;
+                    messageInput.focus();
+                    emojiSection.classList.remove('show');
+                });
+                emojiGrid.appendChild(emojiItem);
+            });
+        }
+
+        // Toggle emoji section on emoji picker button click
+        emojiPicker.addEventListener('click', (e) => {
+            e.stopPropagation();
+            emojiSection.classList.toggle('show');
+        });
+
+        // Close emoji section when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!chatbotPopup.contains(e.target)) {
+                emojiSection.classList.remove('show');
+            }
+        });
+
+        // Initialize emoji grid on load
+        initEmojiGrid();
+
+        // Auto-resize textarea
+        messageInput.addEventListener('input', () => {
+            messageInput.style.height = 'auto';
+            messageInput.style.height = Math.min(messageInput.scrollHeight, 100) + 'px';
+        });
+    </script>
+</body>
+</html>
