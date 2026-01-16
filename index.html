@@ -34,8 +34,214 @@
                 opacity: 1;
             }
         }
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+        @keyframes slideInFromLeft {
+            0% {
+                opacity: 0;
+                transform: translateX(-100px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        @keyframes slideInFromRight {
+            0% {
+                opacity: 0;
+                transform: translateX(100px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(6, 182, 212, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(6, 182, 212, 0.8), 0 0 60px rgba(59, 130, 246, 0.4);
+            }
+        }
+        @keyframes typewriter {
+            from {
+                width: 0;
+            }
+            to {
+                width: 100%;
+            }
+        }
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        .animate-slide-left {
+            animation: slideInFromLeft 1s ease-out;
+        }
+        .animate-slide-right {
+            animation: slideInFromRight 1s ease-out;
+        }
+        .animate-fade-up {
+            animation: fadeInUp 1s ease-out;
+        }
+        .animate-gradient {
+            background-size: 200% 200%;
+            animation: gradient 3s ease infinite;
+        }
+        .animate-glow {
+            animation: glow 2s ease-in-out infinite;
+        }
+        .animate-typewriter {
+            overflow: hidden;
+            white-space: nowrap;
+            animation: typewriter 3s steps(40, end);
+        }
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease-out;
+        }
+        .scroll-animate.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .skill-bar {
+            width: 0;
+            transition: width 2s ease-out;
+        }
+        .skill-bar.animate {
+            width: var(--skill-width);
+        }
+        .service-card {
+            opacity: 0;
+            transform: translateY(30px) scale(0.9);
+            transition: all 0.6s ease-out;
+        }
+        .service-card.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
         .smooth-scroll {
             scroll-behavior: smooth;
+        }
+        
+        /* Animated Flowing Background */
+        .animated-flow-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+        
+        .flow-layer {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            border-radius: 50%;
+            opacity: 0.1;
+        }
+        
+        .flow-layer-1 {
+            background: linear-gradient(45deg, #06b6d4 0%, #3b82f6 50%, #06b6d4 100%);
+            animation: flow-1 20s ease-in-out infinite;
+            top: -50%;
+            left: -50%;
+        }
+        
+        .flow-layer-2 {
+            background: linear-gradient(135deg, #8b5cf6 0%, #06b6d4 50%, #8b5cf6 100%);
+            animation: flow-2 25s ease-in-out infinite;
+            top: -30%;
+            left: -30%;
+        }
+        
+        .flow-layer-3 {
+            background: linear-gradient(225deg, #3b82f6 0%, #8b5cf6 50%, #3b82f6 100%);
+            animation: flow-3 30s ease-in-out infinite;
+            top: -20%;
+            left: -20%;
+        }
+        
+        .flow-layer-4 {
+            background: linear-gradient(315deg, #06b6d4 0%, #3b82f6 50%, #06b6d4 100%);
+            animation: flow-4 35s ease-in-out infinite;
+            top: -10%;
+            left: -10%;
+        }
+        
+        @keyframes flow-1 {
+            0%, 100% {
+                transform: rotate(0deg) scale(1);
+            }
+            50% {
+                transform: rotate(180deg) scale(1.2);
+            }
+        }
+        
+        @keyframes flow-2 {
+            0%, 100% {
+                transform: rotate(0deg) scale(1.1) translateX(0);
+            }
+            50% {
+                transform: rotate(-180deg) scale(1.3) translateX(100px);
+            }
+        }
+        
+        @keyframes flow-3 {
+            0%, 100% {
+                transform: rotate(0deg) scale(0.8) translateY(0);
+            }
+            33% {
+                transform: rotate(120deg) scale(1) translateY(-50px);
+            }
+            66% {
+                transform: rotate(240deg) scale(1.2) translateY(50px);
+            }
+        }
+        
+        @keyframes flow-4 {
+            0%, 100% {
+                transform: rotate(0deg) scale(0.9) translateX(0) translateY(0);
+            }
+            25% {
+                transform: rotate(90deg) scale(1.1) translateX(50px) translateY(-30px);
+            }
+            50% {
+                transform: rotate(180deg) scale(1.2) translateX(0) translateY(-60px);
+            }
+            75% {
+                transform: rotate(270deg) scale(1.1) translateX(-50px) translateY(-30px);
+            }
         }
         /* Chatbot Styles */
         #chatbot-toggler {
@@ -280,6 +486,13 @@
     </style>
 </head>
 <body class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white smooth-scroll">
+    <!-- Animated Flowing Background -->
+    <div class="animated-flow-bg" id="animatedFlowBg">
+        <div class="flow-layer flow-layer-1"></div>
+        <div class="flow-layer flow-layer-2"></div>
+        <div class="flow-layer flow-layer-3"></div>
+        <div class="flow-layer flow-layer-4"></div>
+    </div>
     <!-- Header/Navigation -->
     <header class="fixed top-0 w-full z-50 bg-gray-900/95 backdrop-blur-md border-b border-gray-700/30">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -321,64 +534,64 @@
         <div class="max-w-7xl mx-auto">
             <div class="grid md:grid-cols-2 gap-12 items-center">
                 <!-- Content -->
-                <div class="space-y-6">
+                <div class="space-y-6 animate-slide-left">
                     <div class="space-y-4">
                         <h1 class="text-5xl md:text-6xl font-bold leading-tight">
-                            <span class="bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent">Muhammad Hassan</span>
+                            <span class="bg-gradient-to-r from-blue-400 via-cyan-400 to-teal-400 bg-clip-text text-transparent animate-gradient">Muhammad Hassan</span>
                         </h1>
                         <h2 class="text-2xl md:text-3xl text-gray-300 font-semibold">
-                            Passionate <span class="text-cyan-400">Developer</span>
+                            Passionate <span class="text-cyan-400 animate-pulse">Developer</span>
                         </h2>
                     </div>
 
-                    <p class="text-gray-400 text-lg leading-relaxed max-w-lg">
+                    <p class="text-gray-400 text-lg leading-relaxed max-w-lg animate-fade-up" style="animation-delay: 0.2s;">
                         I am a Web Developer based in Pakistan with 1 year of experience helping clients launch their websites. I focus on delivering work that is fast, responsive, and easy to use.
                     </p>
 
                     <!-- CTA Buttons -->
-                    <div class="flex flex-col sm:flex-row gap-4 pt-4">
-                        <a href="#projects" class="inline-flex items-center justify-center gap-2 px-8 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-cyan-600 transition-all duration-300 shadow-lg hover:shadow-cyan-500/50">
+                    <div class="flex flex-col sm:flex-row gap-4 pt-4 animate-fade-up" style="animation-delay: 0.4s;">
+                        <a href="#projects" class="inline-flex items-center justify-center gap-2 px-8 py-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold rounded-lg hover:from-blue-600 hover:to-cyan-600 transition-all duration-300 shadow-lg hover:shadow-cyan-500/50 animate-glow">
                             <i class="fas fa-code"></i> View My Projects
                         </a>
-                        <a href="mailto:hassansadiq19920@gmail.com" class="inline-flex items-center justify-center gap-2 px-8 py-3 border-2 border-cyan-400 text-cyan-400 font-semibold rounded-lg hover:bg-cyan-400/10 transition-all duration-300">
+                        <a href="mailto:hassansadiq19920@gmail.com" class="inline-flex items-center justify-center gap-2 px-8 py-3 border-2 border-cyan-400 text-cyan-400 font-semibold rounded-lg hover:bg-cyan-400/10 transition-all duration-300 hover:animate-pulse">
                             <i class="fas fa-paper-plane"></i> Contact Me
                         </a>
                     </div>
 
                     <!-- Social Icons -->
-                    <div class="flex gap-6 pt-4">
-                        <a href="https://github.com/muhammadh4ssan"target="_blank" class="w-12 h-12 rounded-lg bg-gray-800 hover:bg-cyan-500/20 flex items-center justify-center text-cyan-400 hover:text-cyan-300 transition-all duration-300 border border-gray-700 hover:border-cyan-400">
+                    <div class="flex gap-6 pt-4 animate-fade-up" style="animation-delay: 0.6s;">
+                        <a href="https://github.com/muhammadh4ssan"target="_blank" class="w-12 h-12 rounded-lg bg-gray-800 hover:bg-cyan-500/20 flex items-center justify-center text-cyan-400 hover:text-cyan-300 transition-all duration-300 border border-gray-700 hover:border-cyan-400 hover:scale-110 hover:animate-pulse">
                             <i class="fab fa-github text-xl"></i>
                         </a>
-                        <a href="https://pk.linkedin.com/in/muhammad-hassan-205a073a4"target="_blank" class="w-12 h-12 rounded-lg bg-gray-800 hover:bg-cyan-500/20 flex items-center justify-center text-cyan-400 hover:text-cyan-300 transition-all duration-300 border border-gray-700 hover:border-cyan-400">
+                        <a href="https://pk.linkedin.com/in/muhammad-hassan-205a073a4"target="_blank" class="w-12 h-12 rounded-lg bg-gray-800 hover:bg-cyan-500/20 flex items-center justify-center text-cyan-400 hover:text-cyan-300 transition-all duration-300 border border-gray-700 hover:border-cyan-400 hover:scale-110 hover:animate-pulse">
                             <i class="fab fa-linkedin text-xl"></i>
                         </a>
                         <a href="https://x.com/mh4ssanx1?s=21"target="_blank"
-                        class="w-12 h-12 rounded-lg bg-gray-800 hover:bg-cyan-500/20 flex items-center justify-center text-cyan-400 hover:text-cyan-300 transition-all duration-300 border border-gray-700 hover:border-cyan-400">
+                        class="w-12 h-12 rounded-lg bg-gray-800 hover:bg-cyan-500/20 flex items-center justify-center text-cyan-400 hover:text-cyan-300 transition-all duration-300 border border-gray-700 hover:border-cyan-400 hover:scale-110 hover:animate-pulse">
                             <i class="fab fa-twitter text-xl"></i>
                         </a>
                         <a href="https://www.instagram.com/h4ssan.1x?igsh=MXFpN2ZhcWVxbmtrZQ%3D%3D&utm_source=qr"target="_blank"
-                        class="w-12 h-12 rounded-lg bg-gray-800 hover:bg-cyan-500/20 flex items-center justify-center text-cyan-400 hover:text-cyan-300 transition-all duration-300 border border-gray-700 hover:border-cyan-400">
+                        class="w-12 h-12 rounded-lg bg-gray-800 hover:bg-cyan-500/20 flex items-center justify-center text-cyan-400 hover:text-cyan-300 transition-all duration-300 border border-gray-700 hover:border-cyan-400 hover:scale-110 hover:animate-pulse">
                             <i class="fab fa-instagram text-xl"></i>
                         </a>
                         <a href="https://www.tiktok.com/@h4ssansadiq?_r=1&_t=ZS-935iM3nnWKK" target="_blank"
-                        class="w-12 h-12 rounded-lg bg-gray-800 hover:bg-cyan-500/20 flex items-center justify-center text-cyan-400 hover:text-cyan-300 transition-all duration-300 border border-gray-700 hover:border-cyan-400">
+                        class="w-12 h-12 rounded-lg bg-gray-800 hover:bg-cyan-500/20 flex items-center justify-center text-cyan-400 hover:text-cyan-300 transition-all duration-300 border border-gray-700 hover:border-cyan-400 hover:scale-110 hover:animate-pulse">
                             <i class="fab fa-tiktok text-xl"></i>
                         </a>
                     </div>
                 </div>
 
                 <!-- Profile Image -->
-                <div class="relative flex justify-center">
-                    <div class="relative w-64 h-64 md:w-80 md:h-80">
+                <div class="relative flex justify-center animate-slide-right">
+                    <div class="relative w-64 h-64 md:w-80 md:h-80 animate-float">
                         <!-- Animated Background Rings -->
                         <div class="absolute inset-0 rounded-full border-2 border-cyan-400/30 animate-pulse"></div>
                         <div class="absolute inset-4 rounded-full border-2 border-blue-400/20 pulse-ring" style="animation-delay: 0s;"></div>
                         <div class="absolute inset-8 rounded-full border-2 border-teal-400/10 pulse-ring" style="animation-delay: 0.6s;"></div>
 
                         <!-- Profile Image Container -->
-                        <div class="absolute inset-0 rounded-full overflow-hidden border-4 border-gradient-to-r from-blue-400 to-cyan-400 bg-gradient-to-br from-blue-500/20 to-cyan-500/20">
-                            <img src="IMG_0576.png" alt="Muhammad Hassan" class="w-full h-full object-cover" />
+                        <div class="absolute inset-0 rounded-full overflow-hidden border-4 border-gradient-to-r from-blue-400 to-cyan-400 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 animate-glow">
+                            <img src="IMG_0576.png" alt="Muhammad Hassan" class="w-full h-full object-cover hover:scale-110 transition-transform duration-500" />
                         </div>
                     </div>
                 </div>
@@ -574,7 +787,7 @@
 <footer class="py-8 px-4 sm:px-6 lg:px-8 bg-gray-900 border-t border-gray-700/30 mt-20">
   <div class="max-w-7xl mx-auto text-center">
     <span class="text-gray-400">
-      Created By <a href="#Home" class="text-cyan-400 hover:text-cyan-300 transition-colors">HassanWebDev</a> | &#169; 2026 All Rights Reserved
+      Created By <a href="#" class="text-cyan-400 hover:text-cyan-300 transition-colors">HassanWebDev</a> | &#169; 2026 All Rights Reserved
     </span>
   </div>
 </footer>
@@ -921,5 +1134,4 @@ const emojiGrid = document.getElementById('emoji-grid');
         });
     </script>
 </body>
-
 </html>
